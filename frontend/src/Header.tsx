@@ -1,9 +1,9 @@
-const Header = () => {
+const Heading = () => {
   return (
-    <header>
-      <h1>Bowling League: Marlins & Sharks</h1>
-    </header>
+    <h1 className="text-2xl font-bold text-center my-4">
+      Marlins & Sharks Bowlers
+    </h1>
   );
 };
 
-export default Header;
+export default Heading;

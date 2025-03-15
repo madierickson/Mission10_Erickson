@@ -22,8 +22,11 @@ public class BowlersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Bowler>>> GetBowlers()
     {
-        return await _context.Bowlers
-            .Where(b => b.TeamName == "Marlins" || b.TeamName == "Sharks")
+        var bowlers = await _context.Bowlers
+            .Include(b => b.Team)
+            .Where(b => b.Team != null && (b.Team.TeamName == "Marlins" || b.Team.TeamName == "Sharks"))
             .ToListAsync();
+
+        return Ok(bowlers);
     }
 }

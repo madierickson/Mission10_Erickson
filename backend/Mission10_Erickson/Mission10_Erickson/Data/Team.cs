@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Mission10_Erickson.Data;
 
-public partial class Team
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+
+public class Team
 {
-    public int TeamId { get; set; }
+    [Key]  // Primary Key
+    public int TeamID { get; set; }
 
-    public string TeamName { get; set; } = null!;
+    [Required]
+    public string TeamName { get; set; } = string.Empty;
 
-    public int? CaptainId { get; set; }
+    public int? CaptainID { get; set; }  // Can be null
 
-    public virtual ICollection<Bowler> Bowlers { get; set; } = new List<Bowler>();
-
-    public virtual ICollection<TourneyMatch> TourneyMatchEvenLaneTeams { get; set; } = new List<TourneyMatch>();
-
-    public virtual ICollection<TourneyMatch> TourneyMatchOddLaneTeams { get; set; } = new List<TourneyMatch>();
+    [JsonIgnore]
+    public ICollection<Bowler> Bowlers { get; set; }
 }

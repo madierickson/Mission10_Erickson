@@ -6,23 +6,38 @@ using Mission10_Erickson.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
-builder.Services.AddControllers();
+// Add services to the container.
 builder.Services.AddDbContext<BowlerContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("BowlerConnection")));
+    options.UseSqlite("Data Source=BowlingLeague.sqlite"));  // Use SQLite connection
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Enable CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
-        policy => policy.WithOrigins("http://localhost:5173")
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
 
 var app = builder.Build();
 
-// Middleware
-app.UseCors("AllowReactApp");
+// Configure the HTTP request pipeline.
+app.UseCors("AllowAll"); // Apply CORS policy
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void ConfigureServices(IServiceCollection services)
+{
+    services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        });
+}
+
